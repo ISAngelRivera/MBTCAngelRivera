@@ -11,21 +11,21 @@
 
 
 <!-- ABOUT THE PROJECT -->
-## About the project
+## 1. About the project
 
 **THE FORCE** is designed to interact with The Star Wars API to retrieve data, process it, and expose a new API endpoint that serves the sorted data. 
 
-### Project workflow 
+### 1.1 Project workflow 
 
 1. **API Interaction**: The service uses the `theforceapiservice.py` to fetch data from the SWAPI's people endpoint.
 2. **Data Processing**: The data is sorted by the name attribute within the service.
 3. **Flask Application**: The `theforceapp.py` sets up a Flask web service that exposes an endpoint to retrieve the sorted data.
 4. **Containerization**: The application is containerized using Docker `Dockerfile`, making it easy to deploy.
-5. **Orchestration**: Kubernetes is used for deployment and scaling, with configurations provided in the `.yaml` files.
+5. **Orchestration**: Minikube is used for deployment and scaling, with configurations provided in the `.yaml` files.
 6. **Load Testing**: Load is generated using a BusyBox container `load-generator.yaml` to test the scalability of the service.
 
 
-### Project structure
+### 1.2 Project structure
 
 ```
 MBTCAngelRivera/
@@ -60,9 +60,9 @@ MBTCAngelRivera/
 
 
 <!-- GETTING STARTED -->
-## Getting Started
-### Prerequisites
-#### Install Python
+## 2. Getting Started
+### 2.1 Prerequisites
+#### 2.1.1 Install Python
 
 ```sh 
 # Windows
@@ -71,13 +71,13 @@ winget install Python
 sudo apt install python3
 ```
 
-#### Install Docker 
+#### 2.1.2 Install Docker 
 
 * Docker installation guide for **Windows** Systems: https://docs.docker.com/desktop/install/windows-install/
 
 * Docker installation guide for **Unix** Systems: https://docs.docker.com/desktop/install/linux-install/
 
-#### Install Minikube  
+#### 2.1.3 Install Minikube  
 
 * Download page for **Windows** & **Unix Systems**: https://minikube.sigs.k8s.io/docs/start/?arch=%2Fwindows%2Fx86-64%2Fstable%2F.exe+download
 
@@ -102,7 +102,7 @@ spec:
 #restart depployment to apply changes if needed
 kubectl rollout restart deployment metrics-server -n kube-system
 ```
-#### Ensure Minikube is running
+#### 2.1.4 Ensure Minikube is running
 ```sh
 # Check status 
 minikube status
@@ -110,26 +110,34 @@ minikube status
 kubectl get nodes
 ```
 
-#### Install Metric Server 
+#### 2.1.5 Install Metric Server 
 
 * Install **metric server**:
 ```sh
+# Install Metric server 
 kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+# Installation Windows check 
+kubectl get apiservices | Select-String -Pattern "metrics"
+# Installation Unix check 
+kubectl get apiservices | grep metrics
 ```
-* Check **metric server** installation: 
+
+* Check **metric server** functionallity: 
 ```sh
-# If the Metric Server was installed successfully, you should be able to run the following commands
+# run the following commands
 kubectl top nodes
 kubectl top pods
 ```
 
-## Project Setup
-### Environment setup
-#### Clone repository
+
+t Setup
+### 3.1 Environment setup
+#### 3.1.1 Clone repository
 ```sh
 git clone https://github.com/ISAngelRivera/MBTCAngelRivera.git
 ```
-#### Activate the virtual environment [optional]
+#### 3.1.2 Activate the virtual environment [optional]
 ```sh
 # Windows 
 .\Scripts\activate
@@ -137,20 +145,20 @@ git clone https://github.com/ISAngelRivera/MBTCAngelRivera.git
 source Scripts/activate
 ```
 
-#### Install dependences
+#### 3.1.3 Install dependences
 ```sh 
 pip install -r TheForce\Theforceservice\requirements.txt
 ```
 
-#### Build Docker image:
+#### 3.1.4 Build Docker image:
 ```sh
 docker build -t theforce-service:latest .
 ```
 
 
-## Run APP Locally
-### Run APP using Docker
-#### Run Flask APP using Docker
+## 4. Run APP Locally
+### 4.1 Run APP using Docker
+#### 4.1.1 Run Flask APP using Docker
 * Run Flask:
 ```sh
 #[OPTIONAL: In this example we used the virtual environment python to avoid Issues]
@@ -172,7 +180,7 @@ http://127.0.0.1:5000/people
 > Additional info about Docker configuration: **`TheForce\Theforceservice\theforceapp.py`**
 
 
-#### Error handling and logging
+#### 4.1.2 Error handling and logging
 Logs will appear in your command line. To verify it's working, **refresh the URL** `http://127.0.0.1:5000/people` and check if a new log entry is generated. Also you can check logs at `TheForce\Theforceservice\logs\theforce.log`
 
 <img src="/images/errorhandlinngdocker.jpg" alt="Error handling in command line" width="800"/>
@@ -181,7 +189,7 @@ Logs will appear in your command line. To verify it's working, **refresh the URL
 > Additional info about error handling configuration: **`TheForce\Theforceservice\utils\error_handling.py`**
 
 
-### Run APP using Docker Compose
+### 4.2 Run APP using Docker Compose
 > [!WARNING]
 > If you have configured Docker to work through Minikube or another solution, please remember to unset it first to avoid any potential issues. 
 ```sh
@@ -190,20 +198,20 @@ Logs will appear in your command line. To verify it's working, **refresh the URL
 # Unix 
 eval $(minikube -p minikube docker-env --unset)
 ```
-#### Run APP DC
+#### 4.2.1 Run APP DC
 ```sh
 # Run APP
-docker-compose up
+docker-compose up --build
 # Stop APP when needed
 ctrl + c
 ```
 > [!NOTE]
 > Additional info about error handling configuration: **`TheForce\Theforceservice\docker-compose.yaml`**
 
-#### Test & Error handling DC
+#### 4.2.2 Test & Error handling DC
 Logs will appear in your command line. To verify it's working, **refresh the URL** `http://127.0.0.1:5000/people` and check if a new log entry is generated. Logs can be also consulted inside the container `/app/logs/thefroce.log`.
 
-<img src="/images/appdockercompose.jpg" alt="Error handling in command line" width="500" height="400"/>
+<img src="/images/appdockercompose.jpg" alt="Error handling in command line" width="" height=""/>
 
 > [!TIP]
 > There are some command that may help you.
@@ -216,24 +224,68 @@ ls -alh /app
 docker exec -it 'containerid' cat /app/logs/thefroce.log
 ```
 
-### Run APP using Kubernetes
-#### Configure Docker to work with Minikube 
+## 5. Run APP using KMinikube 
+### 5.1 Previous validations
+#### 5.1.1 Check Pods
+We will ensure that any "**theforce**" pod is runing
+```sh
+# Windows 
+kubectl get pods -o wide | Select-String "theforce"
+# Unix
+kubectl get pods -o wide | grep theforce
+```
+We should get a '**No resources found in default namespace.**' response
 
+#### 5.1.2 Check images 
+We verify that we dont have any previous "**theforce**" image
+```sh
+minikube image ls
+```
+
+#### 5.1.3 Check deployment
+We check that we dont have any previous "**theforce**" service up
+```sh
+kubectl get deployment
+```
+
+#### 5.1.4 Check services
+Ensure that we dont have any previous "**theforce**" service up
+```sh
+kubectl get service
+```
+
+#### 5.1.5 Check HPA 
+Make sure we dont have any previous "**theforce**" image
+```sh
+kubectl get hpa
+```
+
+### 5.2 Configure Minikube 
+#### 5.2.1 Configure Docker to work with Minikube 
 ```sh
 # Windows
 & minikube -p minikube docker-env --shell powershell | Invoke-Expression
 # Unix
 eval $(minikube docker-env)
 ```
+#### Create image in Minikube
+```sh
+# Create new "thefoce" image 
+docker build -t theforce-service:latest .
+# Check that it was created 
+minikube image ls docker.io/library/theforce-service:latest
+```
 
-#### Ensure Minikube is running
+#### 5.2.2 Ensure Minikube is running
 ```sh
 # Check status 
 minikube status
-# Verify nodes 
+# Verify control-plane node 
 kubectl get nodes
 ```
-#### Deploy Application & check
+<img src="/images/theforceminikubenode.jpg" alt="Error handling in command line" width="700" height=""/>
+
+#### 5.2.3 Deploy Application & check
 ```sh
 # Deploy APP
 kubectl apply -f deployment.yaml
@@ -241,78 +293,82 @@ kubectl apply -f deployment.yaml
 kubectl get deployments
 kubectl get pods
 ```
+<img src="/images/theforcedeploymentcompleted.jpg" alt="Error handling in command line" width="700" height=""/>
 
-#### Expose Application & check
+#### 5.2.4 Deploy Application service & check
 ```sh
 # Expose APP 
 kubectl apply -f service.yaml
 # Check service
 kubectl get services
 ```
-#### Create HPA 
+<img src="/images/theforceservicerunning.jpg" alt="Error handling in command line" width="700" height=""/>
+
+#### 5.2.4 Expose service 
+```sh
+# Windows
+Start-Job -ScriptBlock { minikube service theforce-service }
+# Unix 
+minikube service theforce-service &
+
+# Check service adding "/people" to the provided URL:Port 
+```
+<img src="/images/TheforceExposeservice.jpg" alt="Error handling in command line" width="700" height=""/>
+
+
+### 5.3 Create HPA 
+### 5.3.1 Create HPA based on CPU
 ```sh
 # Create HPA based on CPU: 
 kubectl autoscale deployment theforce-deployment --cpu-percent=50 --min=2 --max=8
 #Check HPA status: 
 kubectl get hpa
 ```
+<img src="/images/TheforceHPAconfigured.jpg" alt="Error handling in command line" width="700" height=""/>
 
-
-
-
-
-
-
-```
-#restart depployment to apply changes if needed
-kubectl rollout restart deployment metrics-server -n kube-system
-```
-
-**Check metric-server install on Windows**: 
+## 6. Performance test
+### 6.1 Check cluster current status
 ```sh
-#Check installation
-kubectl get apiservices | Select-String -Pattern "metrics"
+# Check HPA status
+kubectl get hpa
 ```
+We should have 2 pods with a low CPU load
+<img src="/images/TheforceHPAconfigured.jpg" alt="Error handling in command line" width="700" height=""/>
 
-**Check metric-server install on Unix**: 
+
+### 6.2 Load generator
+#### 6.2.1 Deploy load generator
 ```sh
-#Check installation
-kubectl get apiservices | grep metrics
-
-#Check data from pods
-kubectl top pods
-```
-
-
-
-
-
-
-## Performance test
-### Check cluster current status
-* 
-Image
-
-
-### Load generator
-#### Start load generator
-```sh
-# Deploy load pod
-kubectl apply -f service.yaml
-# Check is running without errors
-kubectl get pods -l app=load-generator
+# Deploy load generator
+kubectl apply -f load-generator.yaml
+# Check is running 
+kubectl get pods 
 # Check logs 
 kubectl logs load-generator
 ```
-
-
-
-#### Stop load generator
+#### 6.2.2 Check autoscaling increassing pods
 ```sh
+kubectl get hpa -w
+```
+<img src="/images/Theforceservicepodsincreasing.jpg" alt="Error handling in command line" width="700" height=""/>
+
+
+#### 6.2.3 Stop load generator
+```sh
+# Delete load generator
 kubectl delete pod load-generator
+# Check is not running 
+kubectl get pods 
 ```
 
-#### Number of replics decreasing
+#### 6.2.4 Check autoscaling decreassing pods
+```sh
+kubectl get hpa -w
+```
+<img src="/images/Theforceservicepodsdecreasing.jpg" alt="Error handling in command line" width="700" height=""/>
+
+> [!TNOTE]
+> Once the CPU load decreases, the autoscaler may take 5 minutes or longer to scale down the replicas. This delay is designed to avoid inconsistencies in the service
 
 
 
