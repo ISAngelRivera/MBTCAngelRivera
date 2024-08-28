@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: load-generator
+spec:
+  containers:
+  - name: load-generator
+    image: busybox
+    command:
+      - sh
+      - -c
+      - |
+        while true; do
+          echo "Generando carga moderada durante 60 segundos..."
+          for i in $(seq 1 2000); do
+            wget -q -O- http://theforce-service.default.svc.cluster.local/people &
+          done
+          sleep 30
+
+          echo "Reduciendo la carga durante 60 segundos..."
+          for i in $(seq 1 1000); do
+            wget -q -O- http://theforce-service.default.svc.cluster.local/people &
+          done
+          sleep 60
+        done
+    resources:
+      requests:
+        cpu: "30m"
+      limits:
+        cpu: "100m"

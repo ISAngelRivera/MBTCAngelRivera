@@ -1,0 +1,9 @@
+services:
+  theforce-service:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=development
+    volumes:
+      - .:/app
