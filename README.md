@@ -367,8 +367,10 @@ kubectl get hpa -w
 ```
 <img src="/images/Theforceservicepodsdecreasing.jpg" alt="Error handling in command line" width="700" height=""/>
 
-> [!TNOTE]
+
+> [!NOTE]
 > Once the CPU load decreases, the autoscaler may take 5 minutes or longer to scale down the replicas. This delay is designed to avoid inconsistencies in the service
+
 
 
 
