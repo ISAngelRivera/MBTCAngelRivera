@@ -283,7 +283,7 @@ minikube status
 # Verify control-plane node 
 kubectl get nodes
 ```
-<img src="/images/theforceminikubenode.jpg" alt="Error handling in command line" width="700" height=""/>
+<img src="/images/Theforceminikubenode.jpg" alt="Error handling in command line" width="700" height=""/>
 
 #### 5.2.3 Deploy Application & check
 ```sh
@@ -293,7 +293,7 @@ kubectl apply -f deployment.yaml
 kubectl get deployments
 kubectl get pods
 ```
-<img src="/images/theforcedeploymentcompleted.jpg" alt="Error handling in command line" width="700" height=""/>
+<img src="/images/Theforcedeploymentcompleted.jpg" alt="Error handling in command line" width="700" height=""/>
 
 #### 5.2.4 Deploy Application service & check
 ```sh
@@ -302,9 +302,9 @@ kubectl apply -f service.yaml
 # Check service
 kubectl get services
 ```
-<img src="/images/theforceservicerunning.jpg" alt="Error handling in command line" width="700" height=""/>
+<img src="/images/Theforceservicerunning.jpg" alt="Error handling in command line" width="700" height=""/>
 
-#### 5.2.4 Expose service 
+#### 5.2.5 Expose service 
 ```sh
 # Windows
 Start-Job -ScriptBlock { minikube service theforce-service }
